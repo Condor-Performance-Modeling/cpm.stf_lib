@@ -125,7 +125,7 @@ namespace stf {
                 const bool skip_item = skippingEnabled_();
                 countSkippedInst_(skip_item);
 
-                if(!STFBranchDecoder::decode(getInitialIEM(), inst_rec, branch)) {
+                if(STF_EXPECT_TRUE(!STFBranchDecoder::decode(getInitialIEM(), inst_rec, branch))) {
                     // ecall opcode 0x73 will be seen as taken but non-branch
                     stf_assert(!(branch.isTaken() && inst_rec.getOpcode() != 0x73), "Branch was marked taken but also didn't decode as a branch");
                     delegates::STFBranchDelegate::reset_(branch);
