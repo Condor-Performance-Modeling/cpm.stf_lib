@@ -126,8 +126,8 @@ namespace stf {
                 countSkippedInst_(skip_item);
 
                 if(STF_EXPECT_TRUE(!STFBranchDecoder::decode(getInitialIEM(), inst_rec, branch))) {
-                    // ecall opcode 0x73 will be seen as taken but non-branch
-                    stf_assert(!(branch.isTaken() && inst_rec.getOpcode() != 0x73), "Branch was marked taken but also didn't decode as a branch");
+                    // ecall, ebreak, & csr opcode 0x73 may be seen as taken but non-branch because the trace may include a taken/return address
+                    stf_assert(!(branch.isTaken() && ((inst_rec.getOpcode() & 0x7F) != 0x73)), "Instruction was marked taken but didn't decode as a branch");
                     delegates::STFBranchDelegate::reset_(branch);
                     resetOperandMaps_();
                     return false;
